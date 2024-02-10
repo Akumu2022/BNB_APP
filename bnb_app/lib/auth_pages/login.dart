@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bnb_app/components/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class loginPage extends StatefulWidget {
   const loginPage({super.key});
@@ -10,6 +14,54 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _signIn(BuildContext context) async {
+    final url =
+        Uri.parse("https://8347-41-212-14-148.ngrok-free.app/api/v1/login");
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+    );
+
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      if (response.body.contains("Login successful")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Login successful!"),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        await Future.delayed(
+          Duration(seconds: 3),
+        );
+        try {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } catch (e) {
+          print("Error navigating to Homepage: $e");
+        }
+      } else {
+        print('Failed to sign in.');
+        print(response.body);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +104,7 @@ class _loginPageState extends State<loginPage> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                           suffixIcon: Icon(
                             Icons.email,
@@ -69,6 +122,7 @@ class _loginPageState extends State<loginPage> {
                         height: 10,
                       ),
                       TextField(
+                        controller: _passwordController,
                         decoration: InputDecoration(
                           suffixIcon: Icon(
                             Icons.visibility_off,
@@ -112,11 +166,10 @@ class _loginPageState extends State<loginPage> {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => HomePage()),
-                              // );
+                              _signIn(context);
+                              print("ahoy");
+                              print("email:${_emailController.text}");
+                              print("password:${_passwordController.text}");
                             },
                             child: Text(
                               "SIGN IN",
@@ -140,11 +193,13 @@ class _loginPageState extends State<loginPage> {
                           children: const [
                             Text("Don't have an account?",
                                 style: TextStyle(fontSize: 18)),
-                            Text("Sign Up",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20)),
+                            Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
                           ],
                         ),
                       )

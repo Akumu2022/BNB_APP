@@ -77,7 +77,8 @@ class _WelcomeState extends State<Welcome> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const loginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const loginPage()),
                     );
                   },
                   child: const Text(
@@ -103,8 +104,10 @@ class _WelcomeState extends State<Welcome> {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const SignUp()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUp()));
                   },
                   child: const Text(
                     "SIGN UP",
