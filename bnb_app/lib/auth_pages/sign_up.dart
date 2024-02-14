@@ -23,7 +23,7 @@ class _SignUpState extends State<SignUp> {
 
   Future<void> _signUp(BuildContext context) async {
     final url =
-        Uri.parse("https://8347-41-212-14-148.ngrok-free.app/api/v1/users");
+        Uri.parse("https://fa99-41-212-14-148.ngrok-free.app/api/v1/users");
     final response = await http.post(
       url,
       headers: <String, String>{

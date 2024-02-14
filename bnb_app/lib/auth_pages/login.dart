@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bnb_app/auth_pages/sign_up.dart';
 import 'package:bnb_app/components/homepage.dart';
+import 'package:bnb_app/try/try.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -19,7 +21,7 @@ class _loginPageState extends State<loginPage> {
 
   Future<void> _signIn(BuildContext context) async {
     final url =
-        Uri.parse("https://8347-41-212-14-148.ngrok-free.app/api/v1/login");
+        Uri.parse("https://fa99-41-212-14-148.ngrok-free.app/api/v1/login");
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -39,12 +41,9 @@ class _loginPageState extends State<loginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Login successful!"),
-            duration: Duration(seconds: 3),
           ),
         );
-        await Future.delayed(
-          Duration(seconds: 3),
-        );
+
         try {
           Navigator.push(
             context,
@@ -190,15 +189,25 @@ class _loginPageState extends State<loginPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
+                          children: [
                             Text("Don't have an account?",
                                 style: TextStyle(fontSize: 18)),
-                            Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignUp(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
                             ),
                           ],
                         ),
